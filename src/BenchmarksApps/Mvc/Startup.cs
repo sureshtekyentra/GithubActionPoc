@@ -1,6 +1,9 @@
 using System;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,8 +45,34 @@ namespace Mvc
 
             app.UseEndpoints(endpoints =>
             {
+                MapAction(endpoints, "/EchoAction", (Person person) => person);
+
                 endpoints.MapControllers();
             });
         }
+
+        public static IEndpointConventionBuilder MapAction<TIn, TOut>(IEndpointRouteBuilder endpoints, string pattern, Func<TIn, TOut> action)
+        {
+            return endpoints.MapPost(pattern, async httpContext =>
+            {
+                httpContext.Response.Headers["Content-Type"] = "application/json; charset=utf-8";
+
+                var input = await JsonSerializer.DeserializeAsync<TIn>(httpContext.Request.Body);
+                var output = action(input);
+                await JsonSerializer.SerializeAsync(httpContext.Response.Body, output);
+            });
+        }
+    }
+
+    public class Person
+    {
+        public string Name { get; set; }
+    }
+
+    [ApiController]
+    public class EchoController : ControllerBase
+    {
+        [HttpPost("/EchoController")]
+        public Person Get(Person person) => person;
     }
 }

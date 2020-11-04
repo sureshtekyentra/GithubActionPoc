@@ -1,0 +1,46 @@
+
+imports:
+  - https://raw.githubusercontent.com/dotnet/crank/master/src/Microsoft.Crank.Jobs.Bombardier/bombardier.yml
+
+jobs:
+  mvc:
+    source:
+      repository: https://github.com/aspnet/benchmarks.git
+      branchOrCommit: halter73/mapaction
+      project: src/BenchmarksApps/Mvc/Mvc.csproj
+    readyStateText: Application started.
+
+scenarios:
+  mapaction:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoAction
+        verb: 'POST --header "Content-Type: application/json"'
+        bodyFile: https://raw.githubusercontent.com/aspnet/benchmarks/halter73/mapaction/scenarios/person.json
+  mapcontroller:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoController
+        verb: 'POST --header "Content-Type: application/json"'
+        bodyFile: https://raw.githubusercontent.com/aspnet/benchmarks/halter73/mapaction/scenarios/person.json
+
+profiles:
+  aspnet-perf-lin:
+    variables:
+      serverAddress: 10.0.0.102
+      cores: 12
+    jobs:
+      application:
+        endpoints:
+          - http://asp-perf-lin:5001
+      load:
+        endpoints:
+          - http://asp-perf-load:5001
+        options:
+          displayOutput: true

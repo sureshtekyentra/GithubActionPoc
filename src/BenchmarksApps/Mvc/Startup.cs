@@ -46,6 +46,8 @@ namespace Mvc
             app.UseEndpoints(endpoints =>
             {
                 MapAction(endpoints, "/EchoAction", (Person person) => person);
+                MapActionWithRouteValue(endpoints, "/EchoAction/{name}", (string name) => new Person { Name = name });
+                MapAction(endpoints, "/EchoAction", () => new Person { Name = "Stephen" });
 
                 endpoints.MapControllers();
             });
@@ -62,6 +64,27 @@ namespace Mvc
                 await JsonSerializer.SerializeAsync(httpContext.Response.Body, output);
             });
         }
+
+        public static IEndpointConventionBuilder MapAction<TOut>(IEndpointRouteBuilder endpoints, string pattern, Func<TOut> action)
+        {
+            return endpoints.MapGet(pattern, httpContext =>
+            {
+                httpContext.Response.Headers["Content-Type"] = "application/json; charset=utf-8";
+                return JsonSerializer.SerializeAsync(httpContext.Response.Body, action());
+            });
+        }
+
+        public static IEndpointConventionBuilder MapActionWithRouteValue<TIn, TOut>(IEndpointRouteBuilder endpoints, string pattern, Func<TIn, TOut> action)
+        {
+            return endpoints.MapGet(pattern, async httpContext =>
+            {
+                httpContext.Response.Headers["Content-Type"] = "application/json; charset=utf-8";
+
+                var input = (TIn)httpContext.Request.RouteValues["name"];
+                var output = action(input);
+                await JsonSerializer.SerializeAsync(httpContext.Response.Body, output);
+            });
+        }
     }
 
     public class Person
@@ -73,6 +96,12 @@ namespace Mvc
     public class EchoController : ControllerBase
     {
         [HttpPost("/EchoController")]
-        public Person Get(Person person) => person;
+        public Person Post(Person person) => person;
+
+        [HttpGet("/EchoController/{name}")]
+        public Person Get(string name) => new Person { Name = name };
+
+        [HttpGet("/EchoController")]
+        public Person Get() => new Person { Name = "Stephen" };
     }
 }

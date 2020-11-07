@@ -1,4 +1,3 @@
-
 imports:
   - https://raw.githubusercontent.com/dotnet/crank/master/src/Microsoft.Crank.Jobs.Bombardier/bombardier.yml
 
@@ -9,18 +8,15 @@ jobs:
       branchOrCommit: halter73/mapaction
       project: src/BenchmarksApps/Mvc/Mvc.csproj
     readyStateText: Application started.
+  uController:
+    source:
+      repository: https://github.com/halter73/uController.git
+      branchOrCommit: master
+      project: Samples/Samples.csproj
+    readyStateText: Application started.
 
 scenarios:
-  mapaction:
-    application:
-      job: mvc
-    load:
-      job: bombardier
-      variables:
-        path: /EchoAction
-        verb: 'POST --header "Content-Type: application/json"'
-        bodyFile: https://raw.githubusercontent.com/aspnet/benchmarks/halter73/mapaction/scenarios/person.json
-  mapcontroller:
+  post-echo-controller:
     application:
       job: mvc
     load:
@@ -29,6 +25,52 @@ scenarios:
         path: /EchoController
         verb: 'POST --header "Content-Type: application/json"'
         bodyFile: https://raw.githubusercontent.com/aspnet/benchmarks/halter73/mapaction/scenarios/person.json
+  post-echo-routerware:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoAction
+        verb: 'POST --header "Content-Type: application/json"'
+        bodyFile: https://raw.githubusercontent.com/aspnet/benchmarks/halter73/mapaction/scenarios/person.json
+  post-echo-ucontroller:
+    application:
+      job: uController
+    load:
+      job: bombardier
+      variables:
+        path: /
+        verb: 'POST --header "Content-Type: application/json"'
+        bodyFile: https://raw.githubusercontent.com/aspnet/benchmarks/halter73/mapaction/scenarios/person.json
+  get-echo-controller:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoController/Stephen
+  get-echo-routerware:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoAction/Stephen
+  get-output-controller:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoController
+  get-output-routerware:
+    application:
+      job: mvc
+    load:
+      job: bombardier
+      variables:
+        path: /EchoAction
 
 profiles:
   aspnet-perf-lin:

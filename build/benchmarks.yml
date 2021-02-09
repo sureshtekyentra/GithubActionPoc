@@ -39,6 +39,7 @@ jobs:
   displayName: CrossGen2
   pool: server
   timeoutInMinutes: 120
+  dependsOn: CrossGen_Linux
   condition: and(succeededOrFailed(), eq(variables['am'], true))
   strategy:
     maxParallel: 1

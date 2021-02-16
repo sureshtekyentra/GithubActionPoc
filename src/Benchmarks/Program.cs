@@ -49,6 +49,8 @@ namespace Benchmarks
             BenchmarksEventSource.MeasureAspNetVersion();
             BenchmarksEventSource.MeasureNetCoreAppVersion();
 
+            Console.WriteLine($"After BenchmarksEventSource");
+            
             var config = new ConfigurationBuilder()
                 .AddJsonFile("hosting.json", optional: true)
                 .AddEnvironmentVariables(prefix: "ASPNETCORE_")
@@ -58,6 +60,8 @@ namespace Benchmarks
             Server = config["server"] ?? "Kestrel";
 
             Protocol = config["protocol"] ?? "";
+
+            Console.WriteLine($"new WebHostBuilder()");
 
             var webHostBuilder = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
@@ -92,6 +96,8 @@ namespace Benchmarks
             bool? threadPoolDispatching = null;
             if (String.Equals(Server, "Kestrel", StringComparison.OrdinalIgnoreCase))
             {
+                Console.WriteLine($"UseKestrel");
+
                 webHostBuilder = webHostBuilder.UseKestrel(options =>
                 {
                     var urls = config["urls"] ?? config["server.urls"];
@@ -191,6 +197,8 @@ namespace Benchmarks
             {
                 throw new InvalidOperationException($"Unknown server value: {Server}");
             }
+
+            Console.WriteLine($"webHostBuilder.Build()");
 
             var webHost = webHostBuilder.Build();
 

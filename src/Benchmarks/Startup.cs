@@ -110,20 +110,25 @@ namespace Benchmarks
 #endif
             }
 
+            Console.WriteLine($"a");
+            
             if (Scenarios.Any("Ef"))
             {
                 services.AddScoped<EfDb>();
             }
+            Console.WriteLine($"b");
 
             if (Scenarios.Any("Raw"))
             {
                 services.AddScoped<RawDb>();
             }
+            Console.WriteLine($"c");
 
             if (Scenarios.Any("Dapper"))
             {
                 services.AddScoped<DapperDb>();
             }
+            Console.WriteLine($"d");
 
             if (Scenarios.Any("Fortunes"))
             {
@@ -134,6 +139,8 @@ namespace Benchmarks
                     options.TextEncoderSettings = settings;
                 });
             }
+            Console.WriteLine($"e");
+
 
 #if NETCOREAPP2_1 || NETCOREAPP2_2
             if (Scenarios.Any("Mvc"))
@@ -180,6 +187,7 @@ namespace Benchmarks
 #else
 #error "Unsupported TFM"
 #endif
+            Console.WriteLine($"f");
 
             if (Scenarios.Any("MemoryCache"))
             {
@@ -358,8 +366,6 @@ namespace Benchmarks
             }
 
             app.UseAutoShutdown();
-
-            Console.WriteLine($"ConfigureServices() finished");
         }
     }
 }

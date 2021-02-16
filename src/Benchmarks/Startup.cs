@@ -358,6 +358,8 @@ namespace Benchmarks
             }
 
             app.UseAutoShutdown();
+
+            Console.WriteLine($"ConfigureServices() finished");
         }
     }
 }

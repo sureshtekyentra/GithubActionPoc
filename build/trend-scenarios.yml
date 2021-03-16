@@ -17,42 +17,15 @@ parameters:
   type: object
   default:
 
-# Platform
-
-  - displayName: Plaintext Platform
-    arguments: --scenario plaintext $(platformJobs) --property scenario=PlaintextPlatform --property protocol=http
-  - displayName: Json Platform
-    arguments: --scenario json $(platformJobs) --property scenario=JsonPlatform --property protocol=http
-  - displayName: Plaintext Platform Inline
-    arguments: --scenario plaintext $(platformJobs) --application.environmentVariables DOTNET_SYSTEM_NET_SOCKETS_INLINE_COMPLETIONS=1 --property scenario=PlaintextPlatformInline --property protocol=http
-  - displayName: Json Platform Inline
-    arguments: --scenario json $(platformJobs) --application.environmentVariables DOTNET_SYSTEM_NET_SOCKETS_INLINE_COMPLETIONS=1 --property scenario=JsonPlatformInline --property protocol=http
-
 # Plaintext
 
-  - displayName: Plaintext
-    arguments: --scenario plaintext $(plaintextJobsV2) --property scenario=Plaintext --property protocol=http
   - displayName: Plaintext Mvc
     arguments: --scenario mvc $(plaintextJobsV2) --property scenario=PlaintextMvc --property protocol=http
   - displayName: Plaintext MapAction
     arguments: --scenario mapaction $(plaintextJobsV2) --property scenario=PlaintextMapAction --property protocol=http
-  - displayName: Plaintext Endpoint
-    arguments: --scenario endpoint $(plaintextJobsV2) --property scenario=PlaintextEndpoint --property protocol=http
-  - displayName: Plaintext Connection Close
-    arguments: --scenario connectionclose $(plaintextJobsV2) --property scenario=ConnectionClose --property protocol=http --variable connections=32 --property connections=32 
-  - displayName: Plaintext Connection Close Https
-    arguments: --scenario connectionclosehttps $(plaintextJobsV2) --property scenario=ConnectionCloseHttps --property protocol=https --variable connections=32 --property connections=32
 
 # Json
 
-  - displayName: Json
-    arguments: --scenario json $(jsonJobsV2) --property scenario=Json --property protocol=http
-  - displayName: Json HttpSys
-    arguments: --scenario json $(jsonJobsV2) --property scenario=Json --property protocol=http --property scenario=JsonHttpSys --variable server=HttpSys --application.options.requiredOperatingSystem windows
-  - displayName: Json Https
-    arguments: --scenario https $(jsonJobsV2) --property scenario=JsonHttps --property protocol=https
-  - displayName: Json Crossgen2
-    arguments: --scenario json $(jsonJobsV2) --property scenario=JsonCrossgen2 --property protocol=http --application.buildArguments \"/p:PublishReadyToRun=true /p:PublishReadyToRunUseCrossgen2=true \" --application.options.requiredOperatingSystem windows
   - displayName: Json Mvc
     arguments: --scenario mvc $(jsonJobsV2) --property scenario=JsonMvc --property protocol=http
   - displayName: Json MapAction

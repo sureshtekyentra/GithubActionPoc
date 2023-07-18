@@ -1,0 +1,20 @@
+name: gitleaks
+on:
+  push:
+    branches: [ "sureshtekyentra-patch-1", "main" ]
+
+jobs:
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Gitleaks    
+      - uses:  gitleaks/gitleaks-action@v2.3.2
+        env:
+          GITHUB_TOKEN: "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"
+          GITLEAKS_LICENSE: "FC6479-1002E6-57E654-9D249C-93F706-V3"
+          command: gitleaks detect
+          

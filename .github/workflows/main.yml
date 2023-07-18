@@ -15,7 +15,7 @@ jobs:
       - uses:  gitleaks/gitleaks-action@v2.3.2
         env:
           GITHUB_TOKEN: "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"
-          GITLEAKS_LICENSE: "FC6479-1002E6-57E654-9D249C-93F706-V3"
+          GITLEAKS_LICENSE: "FC6479-1002E6-57E654"
           command: gitleaks detect --source .
  
           
